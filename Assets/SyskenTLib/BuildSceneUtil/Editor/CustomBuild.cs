@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace SyskenTLib.BuildSceneUtilEditor
 {
@@ -312,6 +314,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
             
 
         }
+        
 
         private static string CreateBuildDirectory(string preDirectoryName,SaveDirectoryType directoryType,bool isNotDirectoryBuild,string appName)
         {
@@ -581,6 +584,26 @@ namespace SyskenTLib.BuildSceneUtilEditor
            
             
             //ビルドオプション
+            BuildOptions nextBuildOptions = BuildOptions.None;
+            
+            //ビルドオプション：デバッグビルド
+            if (config.isDevelopmentBuild)
+            {
+                nextBuildOptions |= BuildOptions.Development;
+            }
+            
+                        
+            //ビルドオプション：ビルド後のフォルダを開く処理
+            if (IsAutoOpenDirectoryAfterBuild(buildTarget, saveDirectoryPath, config))
+            {
+                nextBuildOptions |= BuildOptions.ShowBuiltPlayer;
+            }
+            
+            //ビルドオプション：ビルド後アプリを実行する
+            if (IsBuildAndRun(buildTarget, saveDirectoryPath, config))
+            {
+                nextBuildOptions |= BuildOptions.AutoRunPlayer;
+            }
             
             
            
@@ -588,26 +611,171 @@ namespace SyskenTLib.BuildSceneUtilEditor
                 buildSceneArray
                 ,saveDirectoryPath
                 ,buildTarget
-                ,BuildOptions.None        
+                ,nextBuildOptions     
             );
             
             Debug.Log("ビルド結果："+buildReport.summary.result);
             Debug.Log("ビルド結果: ビルド時間="+buildReport.summary.totalTime);
             Debug.Log("ビルド結果: ビルドしたファイル数="+buildReport.files.Length);
-            
+            Debug.Log("ビルド結果:　エラー数="+buildReport.summary.totalErrors);
+            Debug.Log("ビルド結果: 警告数="+buildReport.summary.totalWarnings);
+            Debug.Log("ビルド結果: ビルドオプション="+nextBuildOptions);
+            Debug.Log("ビルド結果：保存先："+ saveDirectoryPath);
             
             
             //ビルド保存先をおぼえておく
             _lastBuildDirectoryPath = saveDirectoryPath;
+
+            
+            //一部のプラットフォームは、独自Runする
+            AutoRunAfterBuild(buildTarget, saveDirectoryPath, config);
+
+        }
+
+
+        private static bool IsAutoOpenDirectoryAfterBuild(BuildTarget buildTarget, string savePath, CustomBuildConfig config)
+        {
+            switch (buildTarget)
+            {
+                case BuildTarget.Android:
+                {
+                    return config.isAutoOpenDirectoryAfterBuild_ONANDROID;
+
+                }
+                    
+                
+                case BuildTarget.iOS:
+                {
+                    return config.isAutoOpenDirectoryAfterBuild_ONIOS;
+                }
+           
+                
+                case BuildTarget.StandaloneWindows:
+                {
+                    return config.isAutoOpenDirectoryAfterBuild_ONWINDOWS;
+                }
+                   
+                
+                case BuildTarget.StandaloneWindows64:
+                {
+                    return config.isAutoOpenDirectoryAfterBuild_ONWINDOWS;
+                }
+                
+                case BuildTarget.StandaloneOSX:
+                {
+                    return config.isAutoOpenDirectoryAfterBuild_ONOSX;
+                }
+                    
+            }
+
+            return false;
+        }
+
+        private static bool IsBuildAndRun(BuildTarget buildTarget, string savePath, CustomBuildConfig config)
+        {
+            switch (buildTarget)
+            {
+                case BuildTarget.Android:
+                {
+                    return config.isAutoRunAfterBuild_ONANDROID;
+                }
+
+
+                case BuildTarget.iOS:
+                {
+                    return config.isAutoRunAfterBuild_ONIOS;
+                }
+
+
+                case BuildTarget.StandaloneWindows:
+                {
+                    break;
+                }
+
+
+                case BuildTarget.StandaloneWindows64:
+                {
+                    break;
+                }
+
+
+                case BuildTarget.StandaloneOSX:
+                {
+                    break;
+                }
+
+            }
+            return false;
+        }
+
+        
+        /// <summary>
+        /// 一部のプラットフォームは、Build&Runがうまくうごかないので、独自で実行する
+        /// </summary>
+        /// <param name="buildTarget"></param>
+        /// <param name="savePath"></param>
+        /// <param name="config"></param>
+        private static void AutoRunAfterBuild(BuildTarget buildTarget, string savePath, CustomBuildConfig config)
+        {
+            switch (buildTarget)
+            {
+                case BuildTarget.Android:
+                {
+                    if (config.isAutoRunAfterBuild_ONANDROID)
+                    {
+
+                    }
+                    
+                }
+                    break;
+                
+                case BuildTarget.iOS:
+                {
+                    if (config.isAutoRunAfterBuild_ONIOS)
+                    {
+                        
+                    }
+                }
+                    break;
+                
+                case BuildTarget.StandaloneWindows:
+                {
+                    if (config.isAutoRunAfterBuild_ONWINDOWS)
+                    {
+                        Process proc = new Process();
+                        proc.StartInfo.FileName = savePath+".exe";
+                        proc.Start();
+                        // Application.OpenURL("file://"+savePath+".exe");
+                    }
+                }
+                    break;
+                
+                case BuildTarget.StandaloneWindows64:
+                {
+                    if (config.isAutoRunAfterBuild_ONWINDOWS)
+                    {
+                        Process proc = new Process();
+                        proc.StartInfo.FileName = savePath+".exe";
+                        proc.Start();
+                        // Application.OpenURL("file://"+savePath+".exe");
+                    }
+                }
+                    break;
+                
+                case BuildTarget.StandaloneOSX:
+                {
+                    if (config.isAutoRunAfterBuild_ONOSX)
+                    {
+                        Application.OpenURL("file://"+savePath+".app");
+                    }
+                }
+                    break;
+            }
         }
         
-
         
         #endregion
 
-        private void OnGUI()
-        {
-            
-        }
+
     }
 }
