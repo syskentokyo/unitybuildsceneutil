@@ -83,6 +83,10 @@ namespace SyskenTLib.BuildSceneUtilEditor
             
         }
 
+        /// <summary>
+        /// プラットフォーム検知を登録済みか
+        /// </summary>
+        public static bool _isDoneRegistChangePlatformAction = false;
         
 
         private static readonly string privateRootDirPath = "Assets/SyskenTLib/BuildSceneUtil/Editor/1_PrivateConfig/";
@@ -97,6 +101,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
         [MenuItem("SyskenTLib/CustomBuild/OpenLastDirectory",priority = 30)]
         private static void OpenLastDirectory()
         {
+            RegistChangedPlatform();//プラットフォーム変更を検知開始
             Debug.Log("最後のビルド保存先："+_lastBuildConfig);
             if (_lastBuildDirectoryPath != "")
             {
@@ -107,6 +112,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
         [MenuItem("SyskenTLib/CustomBuild/LogOutputLastBuildInfo",priority = 40)]
         private static void LogOutputLastBuildInfo()
         {
+            RegistChangedPlatform();//プラットフォーム変更を検知開始
             Debug.Log("最後のビルド保存先："+_lastBuildConfig);
             Debug.Log("最後のビルド種類："+_lastBuildType);
 
@@ -116,6 +122,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
         [MenuItem("SyskenTLib/CustomBuild/FindRootConfig",priority = 100)]
         private static void FindRootConfig()
         {
+            RegistChangedPlatform();//プラットフォーム変更を検知開始
             SyskenTLibCustomRootConfig rootConfig = GetRootConfig();
             if (rootConfig == null)
             {
@@ -129,6 +136,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
         [MenuItem("SyskenTLib/CustomBuild/FindRootPrivateConfig",priority = 100)]
         private static void FindRootPrivateConfig()
         {
+            RegistChangedPlatform();//プラットフォーム変更を検知開始
             SyskenTLibCustomPrivateRootConfig rootConfig = GetRootPrivateConfig();
             if (rootConfig == null)
             {
@@ -142,6 +150,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
         [MenuItem("SyskenTLib/CustomBuild/AutoCreatePrivateConfig",priority = 210)]
         private static void AutoCreatePrivateConfig()
         {
+            RegistChangedPlatform();//プラットフォーム変更を検知開始
             InitPrivateConfig();
 
         }
@@ -149,7 +158,41 @@ namespace SyskenTLib.BuildSceneUtilEditor
         [MenuItem("SyskenTLib/CustomBuild/ReSelectBuildTargetDirectory",priority = 320)]
         private static void ReSelectBuildTargetRoot()
         {
+            RegistChangedPlatform();//プラットフォーム変更を検知開始
             SelectBuildRootDir();
+        }
+        
+        
+        #endregion
+
+        #region プラットフォーム変更検知
+
+        
+        private　static void RegistChangedPlatform()
+        {
+            if (_isDoneRegistChangePlatformAction == false)
+            {
+                _isDoneRegistChangePlatformAction = true;
+                ChangeBuildTargetListener.OnChangedPlatform += OnChangedPlatform;
+            }
+         
+        }
+
+        private static void OnChangedPlatform()
+        {
+            ChangeBuildTargetListener.OnChangedPlatform -= OnChangedPlatform;
+            
+            
+            Debug.Log("プラットフォーム変更を検知");
+            
+            //プラットフォームが変わったので、
+            //一時保存データをリセットする
+            _isDoneRegistChangePlatformAction = false;
+
+            currentBuildTargetRootDirectoryPath = "";
+            _lastBuildConfig = new CustomBuildConfig();
+            _lastBuildType = CustomBuildType.Unknown;
+            _lastBuildDirectoryPath = "";
         }
         
         
@@ -157,8 +200,6 @@ namespace SyskenTLib.BuildSceneUtilEditor
         
         
         
-        
-
         private static void InitPrivateConfig()
         {
             SyskenTLibCustomPrivateRootConfig rootConfig = GetRootPrivateConfig();
@@ -243,8 +284,11 @@ namespace SyskenTLib.BuildSceneUtilEditor
             }
             
         }
+
+        #region パス取得系
+
         
-        
+
 
 
         private static string GetRootConfigPath()
@@ -302,6 +346,9 @@ namespace SyskenTLib.BuildSceneUtilEditor
             return AssetDatabase.LoadAssetAtPath<SyskenTLibCustomPrivateRootConfig> (rootConfigPath);
            
         }
+        
+        
+        #endregion
 
         private static void SelectBuildRootDir()
         {
@@ -462,6 +509,8 @@ namespace SyskenTLib.BuildSceneUtilEditor
 
         private static void StartBuild(CustomBuildType buildType)
         {
+            RegistChangedPlatform();//プラットフォーム変更を検知開始
+            
             Debug.Log("ビルドスタート:"+buildType);
 
             //ルートフォルダ選択
