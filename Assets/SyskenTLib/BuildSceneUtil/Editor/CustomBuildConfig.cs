@@ -16,8 +16,12 @@ namespace SyskenTLib.BuildSceneUtilEditor
     [CreateAssetMenu(fileName = "CustomBuildConfig", menuName = "CustomBuildConfig", order = 0)]
     public class CustomBuildConfig : ScriptableObject
     {
-        [Header("共通")] 
+        [Header("共通")] public bool isClearBuildCache = false;
         public bool isDevelopmentBuild = false;
+
+        public bool isConnectWithProfiler = false;
+        public bool isDeepPriling = false;
+        public bool isAllowDebugging = false;
         
         
         [Tooltip("保存先の名前の前につける文字")]

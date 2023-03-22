@@ -635,6 +635,11 @@ namespace SyskenTLib.BuildSceneUtilEditor
             //ビルドオプション
             BuildOptions nextBuildOptions = BuildOptions.None;
             
+            if (config.isClearBuildCache)
+            {
+                nextBuildOptions |= BuildOptions.CleanBuildCache;
+            }
+            
             //ビルドオプション：デバッグビルド
             if (config.isDevelopmentBuild)
             {
@@ -654,8 +659,25 @@ namespace SyskenTLib.BuildSceneUtilEditor
                 nextBuildOptions |= BuildOptions.AutoRunPlayer;
             }
             
+            if (config.isConnectWithProfiler)
+            {
+                nextBuildOptions |= BuildOptions.ConnectWithProfiler;
+            }
             
-           
+            if (config.isDeepPriling)
+            {
+                nextBuildOptions |= BuildOptions.EnableDeepProfilingSupport;
+            }
+            
+            if (config.isAllowDebugging)
+            {
+                nextBuildOptions |= BuildOptions.AllowDebugging;
+            }
+            
+            
+           //
+           // ビルド実行
+           //
             BuildReport buildReport = BuildPipeline.BuildPlayer(
                 buildSceneArray
                 ,saveDirectoryPath
