@@ -95,6 +95,16 @@ namespace SyskenTLib.BuildSceneUtilEditor
         private static readonly string private3ConfigFileName = "Private3BuildConfig.asset";
         private static readonly string privateGitignoreFileName = ".gitignore";
 
+        
+        
+        //
+        // Android用の設定控え
+        //
+        private static string _backupAndroidAppID = "";
+        private static string _backupAndroidKeyStoreName = "";
+        private static string _backupAndroidKeyStorePass = "";
+        private static string _backupAndroidKeyStoreKeyAliasName = "";
+        private static string _backupAndroidKeyStoreKeyAliasPass = "";
 
         #region メニュー
 
@@ -674,6 +684,11 @@ namespace SyskenTLib.BuildSceneUtilEditor
                 nextBuildOptions |= BuildOptions.AllowDebugging;
             }
             
+            //
+            // Android用の設定
+            //
+            AutoChangeConfigPreBuildOnAndroid(buildTarget, config);
+            
             
            //
            // ビルド実行
@@ -684,14 +699,16 @@ namespace SyskenTLib.BuildSceneUtilEditor
                 ,buildTarget
                 ,nextBuildOptions     
             );
-            
+            string buildSceneLog = "";
+            buildSceneArray.ToList().ForEach(buildScene => { buildSceneLog+= "" + buildScene.path+"\n"; });
             Debug.Log("ビルド結果："+buildReport.summary.result);
-            Debug.Log("ビルド結果: ビルド時間="+buildReport.summary.totalTime);
-            Debug.Log("ビルド結果: ビルドしたファイル数="+buildReport.files.Length);
-            Debug.Log("ビルド結果:　エラー数="+buildReport.summary.totalErrors);
-            Debug.Log("ビルド結果: 警告数="+buildReport.summary.totalWarnings);
-            Debug.Log("ビルド結果: ビルドオプション="+nextBuildOptions);
-            Debug.Log("ビルド結果：保存先："+ saveDirectoryPath);
+            Debug.Log("ビルド結果:シーン="+buildSceneLog);
+            Debug.Log("ビルド結果:ビルド時間="+buildReport.summary.totalTime);
+            Debug.Log("ビルド結果:ビルドしたファイル数="+buildReport.files.Length);
+            Debug.Log("ビルド結果:エラー数="+buildReport.summary.totalErrors);
+            Debug.Log("ビルド結果:警告数="+buildReport.summary.totalWarnings);
+            Debug.Log("ビルド結果:ビルドオプション="+nextBuildOptions);
+            Debug.Log("ビルド結果:保存先："+ saveDirectoryPath);
             
             
             //ビルド保存先をおぼえておく
@@ -700,6 +717,12 @@ namespace SyskenTLib.BuildSceneUtilEditor
             
             //一部のプラットフォームは、独自Runする
             AutoRunAfterBuild(buildTarget, saveDirectoryPath, config);
+            
+            
+            //
+            // Android用の設定を戻す
+            //
+            AutoChangeConfigAfterBuildOnAndroid(buildTarget, config);
 
         }
 
@@ -847,6 +870,72 @@ namespace SyskenTLib.BuildSceneUtilEditor
         
         #endregion
 
+
+        #region Android
+
+        private static void AutoChangeConfigPreBuildOnAndroid(BuildTarget buildTarget, CustomBuildConfig config)
+        {
+            if (buildTarget != BuildTarget.Android) return;
+            
+            
+            Debug.Log("Androidはビルド前に、Unityのプロジェクト設定を書き換えます");
+            
+            //設定上書き
+            
+            //ビルドオプション
+            EditorUserBuildSettings.buildAppBundle = config.isOverwrittenBuildAppBundle_ONANDROID;
+
+            if (config.isOverwrittenAppID_ONANDROID)
+            {
+                Debug.Log("AndroidのアプリID書き換え："+config.overwrittenAppID_ONANDROID);
+                _backupAndroidAppID = PlayerSettings.GetApplicationIdentifier(BuildTargetGroup.Android);
+                
+                //アプリID書き換え
+                PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, config.overwrittenAppID_ONANDROID);
+            }
+
+            if (config.isOverwrittenKeystoreConfig_ONANDROID)
+            {
+                Debug.Log("AndroidのKeyStore設定書き換え："+config.overwrittenAppID_ONANDROID);
+                
+                _backupAndroidKeyStoreName = PlayerSettings.Android.keystoreName;
+                _backupAndroidKeyStorePass = PlayerSettings.Android.keystorePass;
+                _backupAndroidKeyStoreKeyAliasName = PlayerSettings.Android.keyaliasName;
+                _backupAndroidKeyStoreKeyAliasPass = PlayerSettings.Android.keyaliasPass;
+                
+                //KeyStore書き換え
+                PlayerSettings.Android.keystoreName = config.overwrittenKeystoreName_ONANDROID;
+                PlayerSettings.Android.keystorePass = config.overwrittenKeystorePass_ONANDROID;
+                PlayerSettings.Android.keyaliasName = config.overwrittenKeystoreKeyAliasName_ONANDROID;
+                PlayerSettings.Android.keyaliasPass = config.overwrittenKeystoreKeyAliasPass_ONANDROID;
+            }
+        }
+        
+        private static void AutoChangeConfigAfterBuildOnAndroid(BuildTarget buildTarget, CustomBuildConfig config)
+        {
+            if (buildTarget != BuildTarget.Android) return;
+            
+            Debug.Log("Androidはビルド後に、Unityのプロジェクト設定を書き換えたものを戻します");
+
+            if (config.isOverwrittenAppID_ONANDROID)
+            {
+                //アプリID書き換え戻す
+                PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, _backupAndroidAppID);
+            }
+
+            if (config.isOverwrittenKeystoreConfig_ONANDROID)
+            {
+                //KeyStore書き換え戻す
+                PlayerSettings.Android.keystoreName = _backupAndroidKeyStoreName;
+                PlayerSettings.Android.keystorePass = _backupAndroidKeyStorePass;
+                PlayerSettings.Android.keyaliasName = _backupAndroidKeyStoreKeyAliasName;
+                PlayerSettings.Android.keyaliasPass = _backupAndroidKeyStoreKeyAliasPass;
+            }
+            
+        }
+        
+
+        #endregion
 
     }
 }

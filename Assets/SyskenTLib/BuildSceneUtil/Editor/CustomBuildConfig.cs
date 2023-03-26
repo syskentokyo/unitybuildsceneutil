@@ -52,6 +52,17 @@ namespace SyskenTLib.BuildSceneUtilEditor
         public bool isAutoOpenDirectoryAfterBuild_ONANDROID = false;
         public bool isAutoRunAfterBuild_ONANDROID = false;
         
+        public bool isOverwrittenBuildAppBundle_ONANDROID = false;
+        
+        public bool isOverwrittenAppID_ONANDROID = false;
+        public string overwrittenAppID_ONANDROID = "";
+        
+        public bool isOverwrittenKeystoreConfig_ONANDROID = false;
+        public string overwrittenKeystoreName_ONANDROID = "";
+        public string overwrittenKeystorePass_ONANDROID = "";
+        public string overwrittenKeystoreKeyAliasName_ONANDROID = "";
+        public string overwrittenKeystoreKeyAliasPass_ONANDROID = "";
+
         [Header("iOS")] 
         public bool isAutoOpenDirectoryAfterBuild_ONIOS = false;
         public bool isAutoRunAfterBuild_ONIOS = false;
