@@ -96,6 +96,12 @@ namespace SyskenTLib.BuildSceneUtilEditor
         private static readonly string privateGitignoreFileName = ".gitignore";
 
         
+        //
+        // マクロ定義の控え
+        //
+        private static string _backupDefaultDefines = "";
+        private static string _backupAddDefines = "";
+        private static string _resultEditDefines = "";
         
         //
         // Android用の設定控え
@@ -642,6 +648,12 @@ namespace SyskenTLib.BuildSceneUtilEditor
             string saveDirectoryPath = CreateBuildDirectory(config.saveDirectoryPreName,config.saveDirectoryType,isSaveAppFileTypePlatform,appName);
            
             
+            //
+            // マクロ定義
+            //
+            AutoAddDefinesPreBuild(buildTarget, config);
+
+
             //ビルドオプション
             BuildOptions nextBuildOptions = BuildOptions.None;
             
@@ -708,6 +720,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
             Debug.Log("ビルド結果:エラー数="+buildReport.summary.totalErrors);
             Debug.Log("ビルド結果:警告数="+buildReport.summary.totalWarnings);
             Debug.Log("ビルド結果:ビルドオプション="+nextBuildOptions);
+            Debug.Log("ビルド結果:マクロ定義："+ _resultEditDefines);
             Debug.Log("ビルド結果:保存先："+ saveDirectoryPath);
             
             
@@ -723,6 +736,11 @@ namespace SyskenTLib.BuildSceneUtilEditor
             // Android用の設定を戻す
             //
             AutoChangeConfigAfterBuildOnAndroid(buildTarget, config);
+            
+            //
+            // マクロ定義を戻す
+            //
+            AutoAddDefinesAfterBuild(buildTarget, config);
 
         }
 
@@ -868,6 +886,71 @@ namespace SyskenTLib.BuildSceneUtilEditor
         }
         
         
+        #endregion
+
+        #region マクロ定義
+
+        private static void AutoAddDefinesPreBuild(BuildTarget buildTarget, CustomBuildConfig config)
+        {
+            BuildTargetGroup buildTargetGroup = ConvertToBuildTargetGroup(buildTarget);
+            _backupDefaultDefines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
+
+            _backupAddDefines = "";
+            
+
+
+            for (int i = 0; i < config.addDefineList.Count; i++)
+            {
+                _backupAddDefines +=config.addDefineList[i];
+                if (i != (config.addDefineList.Count - 1))
+                {
+                    //最後以外はくっつける
+                    _backupAddDefines += ";";
+                }
+            }
+            
+            _resultEditDefines = _backupDefaultDefines;
+            if (_backupDefaultDefines != "" && config.addDefineList.Count > 0)
+            {
+                _resultEditDefines += ";"+_backupAddDefines;
+            }
+            else
+            {
+                _resultEditDefines += _backupAddDefines;
+            }
+            
+            
+            
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup,_resultEditDefines);
+        }
+
+        private static void AutoAddDefinesAfterBuild(BuildTarget buildTarget, CustomBuildConfig config)
+        {
+            BuildTargetGroup buildTargetGroup = ConvertToBuildTargetGroup(buildTarget);
+            Debug.Log("戻したマクロ定義："+_backupDefaultDefines);
+            
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup,_backupDefaultDefines);
+            
+        }
+
+        private static BuildTargetGroup ConvertToBuildTargetGroup(BuildTarget buildTarget)
+        {
+            switch (buildTarget)
+            {
+                case BuildTarget.StandaloneWindows:
+                case BuildTarget.StandaloneWindows64:
+                case BuildTarget.StandaloneOSX:
+                    return BuildTargetGroup.Standalone;
+                case BuildTarget.iOS:
+                    return BuildTargetGroup.iOS;
+                case BuildTarget.Android:
+                    return BuildTargetGroup.Android;
+                
+            }
+
+
+            return BuildTargetGroup.Unknown;
+        }
         #endregion
 
 

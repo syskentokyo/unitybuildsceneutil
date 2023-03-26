@@ -32,6 +32,8 @@ namespace SyskenTLib.BuildSceneUtilEditor
         
         [Tooltip("保存ディレクトリの決め方")]
         public SaveDirectoryType saveDirectoryType = SaveDirectoryType.AutoCreateDateDir;
+
+        [Header("マクロ定義")] public List<string> addDefineList=new List<string>();
         
         [Header("シーン")]
         public List<SceneAsset> _targetSceneList;
