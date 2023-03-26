@@ -12,4 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c1c79ab8ad848828fa67f08a985009f, type: 3}
   m_Name: ReleaseConfig
   m_EditorClassIdentifier: 
-  _targetSceneList: []
+  isClearBuildCache: 1
+  isDevelopmentBuild: 0
+  isConnectWithProfiler: 0
+  isDeepPriling: 0
+  isAllowDebugging: 0
+  saveDirectoryPreName: release
+  saveAppName: release
+  saveDirectoryType: 0
+  _targetSceneList:
+  - {fileID: 102900000, guid: bcb27f3354a8c4baaaa1e56aa966fceb, type: 3}
+  - {fileID: 102900000, guid: fcb656e31740046baa7853bdb473b4b0, type: 3}
+  - {fileID: 102900000, guid: 8b28be2128b634e379e500b30970a48f, type: 3}
+  isAutoOpenDirectoryAfterBuild_ONWINDOWS: 1
+  isAutoRunAfterBuild_ONWINDOWS: 0
+  isAutoOpenDirectoryAfterBuild_ONOSX: 1
+  isAutoRunAfterBuild_ONOSX: 0
+  isAutoOpenDirectoryAfterBuild_ONANDROID: 1
+  isAutoRunAfterBuild_ONANDROID: 0
+  isAutoOpenDirectoryAfterBuild_ONIOS: 1
+  isAutoRunAfterBuild_ONIOS: 0
+  isOverwrittenAppIDAndTeamID_ONIOS: 0
+  overwrittenAppID_ONIOS: 
+  overwrittenTeamID_ONIOS: 
