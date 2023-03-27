@@ -10,22 +10,23 @@ using Debug = UnityEngine.Debug;
 
 namespace SyskenTLib.BuildSceneUtilEditor
 {
+    public enum CustomBuildType
+    {
+        Unknown,
+        Release,
+        Adhoc1,
+        Adhoc2,
+        Development1,
+        Development2,
+        Development3,
+        Private1,
+        Private2,
+        Private3,
+            
+    }
     public class CustomBuild : EditorWindow
     {
-        public enum CustomBuildType
-        {
-            Unknown,
-            Release,
-            Adhoc1,
-            Adhoc2,
-            Development1,
-            Development2,
-            Development3,
-            Private1,
-            Private2,
-            Private3,
-            
-        }
+
 
         public const string SAVEKEY_CURRENT_BUILD_ROOT_DIR_PATH = "currentBuildTargetRootDirectoryPath";
         public const string SAVEKEY_LAST_BUILD_DIR_PATH = "lastBuildDirectoryPath";
@@ -614,12 +615,12 @@ namespace SyskenTLib.BuildSceneUtilEditor
             _lastBuildType = buildType;
             
             //ここからビルドしていく
-            BuildOnConfig(nextBuildConfig);
+            BuildOnConfig(nextBuildConfig,buildType);
 
         }
 
 
-        private static void BuildOnConfig(CustomBuildConfig config)
+        private static void BuildOnConfig(CustomBuildConfig config,CustomBuildType buildType)
         {
 
             
@@ -652,7 +653,15 @@ namespace SyskenTLib.BuildSceneUtilEditor
             // マクロ定義
             //
             AutoAddDefinesPreBuild(buildTarget, config);
-
+            
+            //
+            // ユーザオリジナルの処理
+            //
+            UserCustomProcessManager userCustomProcessManager = new UserCustomProcessManager();
+            if (config.isActiveUserOriginalProcessPreBuild)
+            {
+                userCustomProcessManager.StartUserOriginalProcessPreBuild(buildType,config.userOriginalParamList,config.userOriginalConfig);
+            }
 
             //ビルドオプション
             BuildOptions nextBuildOptions = BuildOptions.None;
@@ -731,6 +740,14 @@ namespace SyskenTLib.BuildSceneUtilEditor
             //一部のプラットフォームは、独自Runする
             AutoRunAfterBuild(buildTarget, saveDirectoryPath, config);
             
+                        
+            //
+            // ユーザオリジナルの処理
+            //
+            if (config.isActiveUserOriginalProcessAfterBuild)
+            {
+                userCustomProcessManager.StartUserOriginalProcessAfterBuild(buildType,config.userOriginalParamList,config.userOriginalConfig);
+            }
             
             //
             // Android用の設定を戻す
@@ -741,6 +758,8 @@ namespace SyskenTLib.BuildSceneUtilEditor
             // マクロ定義を戻す
             //
             AutoAddDefinesAfterBuild(buildTarget, config);
+            
+            
 
         }
 
