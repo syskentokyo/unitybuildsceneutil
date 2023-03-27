@@ -710,6 +710,10 @@ namespace SyskenTLib.BuildSceneUtilEditor
             //
             AutoChangeConfigPreBuildOnAndroid(buildTarget, config);
             
+                        
+            //ここまでの変更をプロジェクト反映
+            AssetDatabase.SaveAssets();
+            
             
            //
            // ビルド実行
@@ -760,7 +764,8 @@ namespace SyskenTLib.BuildSceneUtilEditor
             AutoAddDefinesAfterBuild(buildTarget, config);
             
             
-
+            //プロジェクト反映
+            AssetDatabase.SaveAssets();
         }
 
 

@@ -805,7 +805,8 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   webGLPowerPreference: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Standalone: DEFINE_TEST1;DEFINE_TEST2
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
