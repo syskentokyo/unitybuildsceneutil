@@ -1,9 +1,7 @@
 {
-    "name": "BuildSceneUtilDemo",
-    "rootNamespace": "SyskenTLib.BuildSceneUtilDemo",
-    "references": [
-        "GUID:bbf222b968dde47a1a2d83c6fbfb62a0"
-    ],
+    "name": "AppConfig",
+    "rootNamespace": "SyskenTLib.CommonAppConfig",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

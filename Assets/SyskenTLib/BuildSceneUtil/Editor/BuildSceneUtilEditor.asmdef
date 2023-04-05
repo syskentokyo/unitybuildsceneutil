@@ -1,7 +1,9 @@
 {
     "name": "BuildSceneUtilEditor",
     "rootNamespace": "SyskenTLib.BuildSceneUtilEditor",
-    "references": [],
+    "references": [
+        "GUID:bbf222b968dde47a1a2d83c6fbfb62a0"
+    ],
     "includePlatforms": [
         "Editor"
     ],

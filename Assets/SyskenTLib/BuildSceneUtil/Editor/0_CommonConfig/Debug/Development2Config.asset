@@ -20,6 +20,12 @@ MonoBehaviour:
   saveDirectoryPreName: dev
   saveAppName: dev
   saveDirectoryType: 0
+  _appConfig: {fileID: 11400000, guid: 40f14cf83cc334ec18fc056c7f890143, type: 2}
+  isActiveUserOriginalProcessPreBuild: 0
+  isActiveUserOriginalProcessAfterBuild: 0
+  userOriginalParamList: []
+  userOriginalConfig: {fileID: 0}
+  addDefineList: []
   _targetSceneList:
   - {fileID: 102900000, guid: fcb656e31740046baa7853bdb473b4b0, type: 3}
   isAutoOpenDirectoryAfterBuild_ONWINDOWS: 1
@@ -28,6 +34,14 @@ MonoBehaviour:
   isAutoRunAfterBuild_ONOSX: 1
   isAutoOpenDirectoryAfterBuild_ONANDROID: 1
   isAutoRunAfterBuild_ONANDROID: 1
+  isOverwrittenBuildAppBundle_ONANDROID: 0
+  isOverwrittenAppID_ONANDROID: 0
+  overwrittenAppID_ONANDROID: 
+  isOverwrittenKeystoreConfig_ONANDROID: 0
+  overwrittenKeystoreName_ONANDROID: 
+  overwrittenKeystorePass_ONANDROID: 
+  overwrittenKeystoreKeyAliasName_ONANDROID: 
+  overwrittenKeystoreKeyAliasPass_ONANDROID: 
   isAutoOpenDirectoryAfterBuild_ONIOS: 1
   isAutoRunAfterBuild_ONIOS: 1
   isOverwrittenAppIDAndTeamID_ONIOS: 0

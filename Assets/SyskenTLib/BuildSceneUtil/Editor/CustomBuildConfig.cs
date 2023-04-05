@@ -33,6 +33,9 @@ namespace SyskenTLib.BuildSceneUtilEditor
         [Tooltip("保存ディレクトリの決め方")]
         public SaveDirectoryType saveDirectoryType = SaveDirectoryType.AutoCreateDateDir;
 
+        [Header("アプリ内定義")] public CommonAppConfig.AppConfig _appConfig;
+        
+        
         [Header("ユーザオリジナル処理")] 
         public bool isActiveUserOriginalProcessPreBuild = false;
         public bool isActiveUserOriginalProcessAfterBuild = false;

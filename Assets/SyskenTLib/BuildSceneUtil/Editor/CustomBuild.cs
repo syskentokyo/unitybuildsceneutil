@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using SyskenTLib.CommonAppConfig;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -96,6 +97,10 @@ namespace SyskenTLib.BuildSceneUtilEditor
         private static readonly string private3ConfigFileName = "Private3BuildConfig.asset";
         private static readonly string privateGitignoreFileName = ".gitignore";
 
+        //
+        // アプリ設定
+        //
+        private static AppConfig _backupAppConfig;
         
         //
         // マクロ定義の控え
@@ -172,14 +177,23 @@ namespace SyskenTLib.BuildSceneUtilEditor
 
         }
 
-        [MenuItem("SyskenTLib/CustomBuild/ReSelectBuildTargetDirectory",priority = 320)]
+        [MenuItem("SyskenTLib/CustomBuild/ReSelectBuildTargetDirectory", priority = 320)]
         private static void ReSelectBuildTargetRoot()
         {
-            RegistChangedPlatform();//プラットフォーム変更を検知開始
+            RegistChangedPlatform(); //プラットフォーム変更を検知開始
             SelectBuildRootDir();
         }
         
         
+        [MenuItem("SyskenTLib/CustomBuild/SelectAppConfigDirtory",priority = 400)]
+        private static void SelectAppConfigDirectory()
+        {
+            RegistChangedPlatform();//プラットフォーム変更を検知開始
+
+            Selection.activeObject = GetAppRootConfig();//UnityEditor上で選択したことにする
+        }
+
+
         #endregion
 
         #region プラットフォーム変更検知
@@ -361,6 +375,35 @@ namespace SyskenTLib.BuildSceneUtilEditor
             
             Debug.Log("ビルドのプライベートルートコンフィグパス："+rootConfigPath);
             return AssetDatabase.LoadAssetAtPath<SyskenTLibCustomPrivateRootConfig> (rootConfigPath);
+           
+        }
+        
+        
+        private static string GetAppRootConfigPath()
+        {
+            string[] guids = AssetDatabase.FindAssets("t:AppRootConfig");
+            if (guids.Length != 1)
+            {
+                Debug.Log("アプリルート設定ファイルがありません。");
+                return "";
+            }
+
+            string filePath = AssetDatabase.GUIDToAssetPath(guids[0]);
+
+            return filePath;
+
+        }
+
+        private static AppRootConfig GetAppRootConfig()
+        {
+            string rootConfigPath = GetAppRootConfigPath();
+            if (rootConfigPath == "")
+            {
+                return null;
+            }
+            
+            Debug.Log("アプリ設定のルートコンフィグパス："+rootConfigPath);
+            return AssetDatabase.LoadAssetAtPath<AppRootConfig> (rootConfigPath);
            
         }
         
@@ -648,7 +691,21 @@ namespace SyskenTLib.BuildSceneUtilEditor
             string appName = config.saveAppName;
             string saveDirectoryPath = CreateBuildDirectory(config.saveDirectoryPreName,config.saveDirectoryType,isSaveAppFileTypePlatform,appName);
            
-            
+            //
+            // アプリ設定ファイル切り替え
+            //
+           
+            _backupAppConfig = null;
+            if (config._appConfig != null)
+            {
+                AppRootConfig appRootConfig = GetAppRootConfig();
+                _backupAppConfig = appRootConfig._appConfig;
+                appRootConfig._appConfig = config._appConfig;
+                Debug.Log("アプリ設定書き換え:"+appRootConfig._appConfig.GetConfigType());
+                EditorUtility.SetDirty(appRootConfig);
+
+            }
+
             //
             // マクロ定義
             //
@@ -713,7 +770,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
                         
             //ここまでの変更をプロジェクト反映
             AssetDatabase.SaveAssets();
-            
+            AssetDatabase.Refresh();
             
            //
            // ビルド実行
@@ -724,6 +781,10 @@ namespace SyskenTLib.BuildSceneUtilEditor
                 ,buildTarget
                 ,nextBuildOptions     
             );
+
+            AppRootConfig currentappRootConfig = GetAppRootConfig();
+            Debug.Log("ビルド結果:アプリ設定："+   currentappRootConfig._appConfig.GetConfigType());
+            
             string buildSceneLog = "";
             buildSceneArray.ToList().ForEach(buildScene => { buildSceneLog+= "" + buildScene.path+"\n"; });
             Debug.Log("ビルド結果："+buildReport.summary.result);
@@ -735,8 +796,8 @@ namespace SyskenTLib.BuildSceneUtilEditor
             Debug.Log("ビルド結果:ビルドオプション="+nextBuildOptions);
             Debug.Log("ビルド結果:マクロ定義："+ _resultEditDefines);
             Debug.Log("ビルド結果:保存先："+ saveDirectoryPath);
-            
-            
+
+
             //ビルド保存先をおぼえておく
             _lastBuildDirectoryPath = saveDirectoryPath;
 
@@ -764,8 +825,21 @@ namespace SyskenTLib.BuildSceneUtilEditor
             AutoAddDefinesAfterBuild(buildTarget, config);
             
             
+            
+            //
+            // アプリの設定戻す
+            //
+            if (_backupAppConfig != null)
+            {
+                AppRootConfig appRootConfig = GetAppRootConfig();
+                appRootConfig._appConfig = _backupAppConfig;
+                EditorUtility.SetDirty(appRootConfig);
+            }
+            
+            
             //プロジェクト反映
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
 
