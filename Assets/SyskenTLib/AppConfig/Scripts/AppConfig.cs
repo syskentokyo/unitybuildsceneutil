@@ -24,6 +24,8 @@ namespace SyskenTLib.CommonAppConfig
         [Header("設定ファイルについて")]
         [SerializeField]private ConfigType _configType = ConfigType.Dev1;
 
+        [Header("共通")] 
+        
 
         [Header("API")] 
         [SerializeField]
@@ -32,6 +34,15 @@ namespace SyskenTLib.CommonAppConfig
         [SerializeField]private  string API_URL3 = "";
         [SerializeField]private  string API_URL4 = "";
         [SerializeField] private  string API_URL5 = "";
+        
+        [SerializeField] private  string API_KEY1 = "";
+        [SerializeField] private  string API_KEY2 = "";
+
+
+        [Header("Auth")] [SerializeField] private string USER_NAME1 = "";
+        [SerializeField] private string PASSWORD_NAME1 = "";
+        [SerializeField] private string USER_NAME2 = "";
+        [SerializeField] private string PASSWORD_NAME2 = "";
 
 
         public ConfigType GetConfigType()
@@ -59,6 +70,33 @@ namespace SyskenTLib.CommonAppConfig
         public string GetAPIURL5()
         {
             return API_URL5;
+        }
+        
+        public string GetAPIKey1()
+        {
+            return API_KEY1;
+        }
+        
+        public string GetAPIKey2()
+        {
+            return API_KEY2;
+        }
+        
+        public string GetUserName1()
+        {
+            return USER_NAME1;
+        }
+        public string GetPassword1()
+        {
+            return PASSWORD_NAME1;
+        }
+        public string GetUserName2()
+        {
+            return USER_NAME2;
+        }
+        public string GetPassword2()
+        {
+            return PASSWORD_NAME2;
         }
 
 
