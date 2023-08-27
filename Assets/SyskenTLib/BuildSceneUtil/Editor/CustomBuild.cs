@@ -114,7 +114,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
 
         #region メニュー
 
-        [MenuItem("SyskenTLib/CustomBuild/OpenLastDirectory",priority = 30)]
+        [MenuItem("File/CustomBuild/OpenLastDirectory",priority = 400)]
         private static void OpenLastDirectory()
         {
             RegistChangedPlatform();//プラットフォーム変更を検知開始
@@ -125,7 +125,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
             }
         }
         
-        [MenuItem("SyskenTLib/CustomBuild/LogOutputLastBuildInfo",priority = 40)]
+        [MenuItem("File/CustomBuild/LogOutputLastBuildInfo",priority =401)]
         private static void LogOutputLastBuildInfo()
         {
             RegistChangedPlatform();//プラットフォーム変更を検知開始
@@ -135,7 +135,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
         }
 
         
-        [MenuItem("SyskenTLib/CustomBuild/FindRootConfig",priority = 100)]
+        [MenuItem("File/CustomBuild/FindRootConfig",priority = 420)]
         private static void FindRootConfig()
         {
             RegistChangedPlatform();//プラットフォーム変更を検知開始
@@ -149,7 +149,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
 
         }
         
-        [MenuItem("SyskenTLib/CustomBuild/FindRootPrivateConfig",priority = 100)]
+        [MenuItem("File/CustomBuild/FindRootPrivateConfig",priority = 421)]
         private static void FindRootPrivateConfig()
         {
             RegistChangedPlatform();//プラットフォーム変更を検知開始
@@ -163,7 +163,16 @@ namespace SyskenTLib.BuildSceneUtilEditor
 
         }
 
-        [MenuItem("SyskenTLib/CustomBuild/ReSelectBuildTargetDirectory", priority = 320)]
+        [MenuItem("File/CustomBuild/FindAppConfigDirectory",priority = 422)]
+        private static void SelectAppConfigDirectory()
+        {
+            RegistChangedPlatform();//プラットフォーム変更を検知開始
+
+            Selection.activeObject = GetAppRootConfig();//UnityEditor上で選択したことにする
+        }
+        
+        
+        [MenuItem("File/CustomBuild/ReSelectBuildTargetDirectory", priority = 440)]
         private static void ReSelectBuildTargetRoot()
         {
             RegistChangedPlatform(); //プラットフォーム変更を検知開始
@@ -171,13 +180,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
         }
         
         
-        [MenuItem("SyskenTLib/CustomBuild/SelectAppConfigDirtory",priority = 400)]
-        private static void SelectAppConfigDirectory()
-        {
-            RegistChangedPlatform();//プラットフォーム変更を検知開始
 
-            Selection.activeObject = GetAppRootConfig();//UnityEditor上で選択したことにする
-        }
 
 
         #endregion
@@ -412,55 +415,55 @@ namespace SyskenTLib.BuildSceneUtilEditor
         
         
         
-        [MenuItem("File/BuildRelease",priority = 310)]
+        [MenuItem("File/BuildRelease",priority = 460)]
         private static void BuildRelease()
         {
             StartBuild(CustomBuildType.Release);
         }
         
-        [MenuItem("File/BuildAdhoc1",priority = 310)]
+        [MenuItem("File/BuildAdhoc1",priority = 510)]
         private static void BuildAdhoc1()
         {
             StartBuild(CustomBuildType.Adhoc1);
         }
         
-        [MenuItem("File/BuildAdhoc2",priority = 310)]
+        [MenuItem("File/BuildAdhoc2",priority = 510)]
         private static void BuildAdhoc2()
         {
             StartBuild(CustomBuildType.Adhoc2);
         }
         
-        [MenuItem("File/BuildDevelopment1",priority = 410)]
+        [MenuItem("File/BuildDevelopment1",priority = 610)]
         private static void BuildDevelopment1()
         {
             StartBuild(CustomBuildType.Development1);
         }
         
-        [MenuItem("File/BuildDevelopment2",priority = 410)]
+        [MenuItem("File/BuildDevelopment2",priority = 610)]
         private static void BuildDevelopment2()
         {
             StartBuild(CustomBuildType.Development2);
         }
         
-        [MenuItem("File/BuildDevelopment3",priority = 410)]
+        [MenuItem("File/BuildDevelopment3",priority = 610)]
         private static void BuildDevelopment3()
         {
             StartBuild(CustomBuildType.Development3);
         }
         
-        [MenuItem("File/BuildPrivate1",priority = 510)]
+        [MenuItem("File/BuildPrivate1",priority = 710)]
         private static void BuildPrivate1()
         {
             StartBuild(CustomBuildType.Private1);
         }
         
-        [MenuItem("File/BuildPrivate2",priority = 510)]
+        [MenuItem("File/BuildPrivate2",priority = 710)]
         private static void BuildPrivate2()
         {
             StartBuild(CustomBuildType.Private2);
         }
         
-        [MenuItem("File/BuildPrivate3",priority = 510)]
+        [MenuItem("File/BuildPrivate3",priority = 710)]
         private static void BuildPrivate3()
         {
             StartBuild(CustomBuildType.Private3);
