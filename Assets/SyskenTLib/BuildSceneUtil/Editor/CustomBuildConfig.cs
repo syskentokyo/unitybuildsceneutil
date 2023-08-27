@@ -36,9 +36,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
         [Header("アプリ内定義")] public CommonAppConfig.AppConfig _appConfig;
         
         
-        [Header("ユーザオリジナル処理")] 
-        public bool isActiveUserOriginalProcessPreBuild = false;
-        public bool isActiveUserOriginalProcessAfterBuild = false;
+        [Header("ユーザオリジナル処理")]
         public List<string> userOriginalParamList;
         public BaseUserOriginalConfig userOriginalConfig;
         

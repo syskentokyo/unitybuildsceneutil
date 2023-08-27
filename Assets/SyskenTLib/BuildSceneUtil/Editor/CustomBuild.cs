@@ -615,10 +615,8 @@ namespace SyskenTLib.BuildSceneUtilEditor
             // ユーザオリジナルの処理
             //
             UserCustomProcessManager userCustomProcessManager = new UserCustomProcessManager();
-            if (config.isActiveUserOriginalProcessPreBuild)
-            {
-                userCustomProcessManager.StartUserOriginalProcessPreBuild(buildType,config.userOriginalParamList,config.userOriginalConfig);
-            }
+            userCustomProcessManager.StartUserOriginalProcessPreBuild(buildType,config.userOriginalParamList,config.userOriginalConfig);
+            
 
             //ビルドオプション
             BuildOptions nextBuildOptions = BuildOptions.None;
@@ -709,10 +707,8 @@ namespace SyskenTLib.BuildSceneUtilEditor
             //
             // ユーザオリジナルの処理
             //
-            if (config.isActiveUserOriginalProcessAfterBuild)
-            {
-                userCustomProcessManager.StartUserOriginalProcessAfterBuild(buildType,config.userOriginalParamList,config.userOriginalConfig);
-            }
+            userCustomProcessManager.StartUserOriginalProcessAfterBuild(buildType,config.userOriginalParamList,config.userOriginalConfig);
+            
             
             //
             // Android用の設定を戻す
