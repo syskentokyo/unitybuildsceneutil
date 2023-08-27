@@ -790,7 +790,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
             Debug.Log("ビルド結果："+buildReport.summary.result);
             Debug.Log("ビルド結果:シーン="+buildSceneLog);
             Debug.Log("ビルド結果:ビルド時間="+buildReport.summary.totalTime);
-            Debug.Log("ビルド結果:ビルドしたファイル数="+buildReport.files.Length);
+            Debug.Log("ビルド結果:ビルドしたファイル数="+buildReport.GetFiles().Length);
             Debug.Log("ビルド結果:エラー数="+buildReport.summary.totalErrors);
             Debug.Log("ビルド結果:警告数="+buildReport.summary.totalWarnings);
             Debug.Log("ビルド結果:ビルドオプション="+nextBuildOptions);
