@@ -10,32 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c1c79ab8ad848828fa67f08a985009f, type: 3}
-  m_Name: ReleaseConfig
+  m_Name: Development2Config
   m_EditorClassIdentifier: 
-  isClearBuildCache: 1
-  isDevelopmentBuild: 0
+  isClearBuildCache: 0
+  isDevelopmentBuild: 1
   isConnectWithProfiler: 0
   isDeepPriling: 0
   isAllowDebugging: 0
-  saveDirectoryPreName: release
-  saveAppName: release
+  saveDirectoryPreName: dev
+  saveAppName: dev
   saveDirectoryType: 0
-  _appConfig: {fileID: 11400000, guid: 46cec0fc3eb2b4976b473f6b31b6a177, type: 2}
+  _appConfig: {fileID: 11400000, guid: 40f14cf83cc334ec18fc056c7f890143, type: 2}
   isActiveUserOriginalProcessPreBuild: 0
   isActiveUserOriginalProcessAfterBuild: 0
   userOriginalParamList: []
-  userOriginalConfig: {fileID: 0}
+  userOriginalConfig: {fileID: 11400000, guid: 19da8a82733a4494e90d8dfbf34b8ce6, type: 2}
   addDefineList: []
   _targetSceneList:
-  - {fileID: 102900000, guid: bcb27f3354a8c4baaaa1e56aa966fceb, type: 3}
   - {fileID: 102900000, guid: fcb656e31740046baa7853bdb473b4b0, type: 3}
-  - {fileID: 102900000, guid: 8b28be2128b634e379e500b30970a48f, type: 3}
   isAutoOpenDirectoryAfterBuild_ONWINDOWS: 1
-  isAutoRunAfterBuild_ONWINDOWS: 0
+  isAutoRunAfterBuild_ONWINDOWS: 1
   isAutoOpenDirectoryAfterBuild_ONOSX: 1
-  isAutoRunAfterBuild_ONOSX: 0
+  isAutoRunAfterBuild_ONOSX: 1
   isAutoOpenDirectoryAfterBuild_ONANDROID: 1
-  isAutoRunAfterBuild_ONANDROID: 0
+  isAutoRunAfterBuild_ONANDROID: 1
   isOverwrittenBuildAppBundle_ONANDROID: 0
   isOverwrittenAppID_ONANDROID: 0
   overwrittenAppID_ONANDROID: 
@@ -45,7 +43,7 @@ MonoBehaviour:
   overwrittenKeystoreKeyAliasName_ONANDROID: 
   overwrittenKeystoreKeyAliasPass_ONANDROID: 
   isAutoOpenDirectoryAfterBuild_ONIOS: 1
-  isAutoRunAfterBuild_ONIOS: 0
+  isAutoRunAfterBuild_ONIOS: 1
   isOverwrittenAppIDAndTeamID_ONIOS: 0
   overwrittenAppID_ONIOS: 
   overwrittenTeamID_ONIOS: 

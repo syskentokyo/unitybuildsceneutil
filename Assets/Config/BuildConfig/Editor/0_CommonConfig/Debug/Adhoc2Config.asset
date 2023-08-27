@@ -24,7 +24,7 @@ MonoBehaviour:
   isActiveUserOriginalProcessPreBuild: 0
   isActiveUserOriginalProcessAfterBuild: 0
   userOriginalParamList: []
-  userOriginalConfig: {fileID: 0}
+  userOriginalConfig: {fileID: 11400000, guid: 19da8a82733a4494e90d8dfbf34b8ce6, type: 2}
   addDefineList: []
   _targetSceneList:
   - {fileID: 102900000, guid: bcb27f3354a8c4baaaa1e56aa966fceb, type: 3}
