@@ -175,6 +175,8 @@ namespace SyskenTLib.BuildSceneUtilEditor
         [MenuItem("File/CustomBuild/ReSelectBuildTargetDirectory", priority = 440)]
         private static void ReSelectBuildTargetRoot()
         {
+            ResetBuildConfigCache();
+            
             RegistChangedPlatform(); //プラットフォーム変更を検知開始
             SelectBuildRootDir();
         }
@@ -209,10 +211,9 @@ namespace SyskenTLib.BuildSceneUtilEditor
             //一時保存データをリセットする
             _isDoneRegistChangePlatformAction = false;
 
-            currentBuildTargetRootDirectoryPath = "";
-            _lastBuildConfig = new CustomBuildConfig();
-            _lastBuildType = CustomBuildType.Unknown;
-            _lastBuildDirectoryPath = "";
+            
+            //ビルドしたときの情報を初期化
+            ResetBuildConfigCache();
         }
         
         
@@ -469,6 +470,17 @@ namespace SyskenTLib.BuildSceneUtilEditor
             StartBuild(CustomBuildType.Private3);
         }
 
+
+        /// <summary>
+        /// ビルドした時の情報を初期化
+        /// </summary>
+        private static void ResetBuildConfigCache()
+        {
+            currentBuildTargetRootDirectoryPath = "";
+            _lastBuildConfig = new CustomBuildConfig();
+            _lastBuildType = CustomBuildType.Unknown;
+            _lastBuildDirectoryPath = "";
+        }
 
 
 
