@@ -31,6 +31,8 @@ namespace SyskenTLib.BuildSceneUtilEditor
 
         public const string SAVEKEY_CURRENT_BUILD_ROOT_DIR_PATH = "currentBuildTargetRootDirectoryPath";
         public const string SAVEKEY_LAST_BUILD_DIR_PATH = "lastBuildDirectoryPath";
+        public const string SAVEKEY_LAST_BUILD_MACHINE_NAME = "lastBuildMachineName";
+        public const string SAVEKEY_LAST_BUILD_MACHINE_ID = "lastBuildMachineID";
 
         /// <summary>
         ///  ビルド保存先のルートフォルダのパス
@@ -81,6 +83,46 @@ namespace SyskenTLib.BuildSceneUtilEditor
             set
             {
                 EditorUserSettings.SetConfigValue(SAVEKEY_LAST_BUILD_DIR_PATH, value);
+            }
+            
+        }
+        
+        public static string _lastBuildMachineName
+        {
+            get
+            {
+                string saveValue=  EditorUserSettings.GetConfigValue(SAVEKEY_LAST_BUILD_MACHINE_NAME);
+                if (saveValue == null)
+                {
+                    return "";
+                }
+
+                return saveValue;
+            }
+
+            set
+            {
+                EditorUserSettings.SetConfigValue(SAVEKEY_LAST_BUILD_MACHINE_NAME, value);
+            }
+            
+        }
+        
+        public static string _lastBuildMachineID
+        {
+            get
+            {
+                string saveValue=  EditorUserSettings.GetConfigValue(SAVEKEY_LAST_BUILD_MACHINE_ID);
+                if (saveValue == null)
+                {
+                    return "";
+                }
+
+                return saveValue;
+            }
+
+            set
+            {
+                EditorUserSettings.SetConfigValue(SAVEKEY_LAST_BUILD_MACHINE_ID, value);
             }
             
         }
@@ -487,12 +529,37 @@ namespace SyskenTLib.BuildSceneUtilEditor
 
         private static void StartBuild(CustomBuildType buildType)
         {
-            RegistChangedPlatform();//プラットフォーム変更を検知開始
-            
-            Debug.Log("ビルドスタート:"+buildType);
+            RegistChangedPlatform(); //プラットフォーム変更を検知開始
 
-            //ルートフォルダ選択
-            if (string.IsNullOrEmpty(currentBuildTargetRootDirectoryPath))
+            Debug.Log("ビルドスタート:" + buildType);
+
+
+            //
+            // PC変更した場合：キャッシュなど削除
+            //
+            string buildMachineName = Environment.MachineName;
+            string buildMachineID = Environment.OSVersion+"_"+SystemInfo.deviceUniqueIdentifier;
+            Debug.Log("ビルドPC名前："+buildMachineName);
+            if (_lastBuildMachineName == ""
+                || _lastBuildMachineName != buildMachineName
+                ||_lastBuildMachineID == ""
+                || _lastBuildMachineID != buildMachineID)
+            {
+                //PCを変えていた場合
+                Debug.Log("ビルドPC名またはPC識別IDが変更されていました。："+buildMachineName+"  "+ buildMachineID);
+
+                //キャッシュ削除
+                ResetBuildConfigCache();
+                
+            }
+            _lastBuildMachineName = buildMachineName;
+            _lastBuildMachineID= buildMachineID;
+
+            
+
+
+                //ルートフォルダ選択
+        if (string.IsNullOrEmpty(currentBuildTargetRootDirectoryPath))
             {
                 SelectBuildRootDir();
             }
@@ -701,6 +768,8 @@ namespace SyskenTLib.BuildSceneUtilEditor
             string buildSceneLog = "";
             buildSceneArray.ToList().ForEach(buildScene => { buildSceneLog+= "" + buildScene.path+"\n"; });
             Debug.Log("ビルド結果："+buildReport.summary.result);
+            Debug.Log("ビルド結果:PC名="+_lastBuildMachineName);
+            Debug.Log("ビルド結果:PC識別ID="+_lastBuildMachineID);
             Debug.Log("ビルド結果:シーン="+buildSceneLog);
             Debug.Log("ビルド結果:ビルド時間="+buildReport.summary.totalTime);
             Debug.Log("ビルド結果:ビルドしたファイル数="+buildReport.GetFiles().Length);
