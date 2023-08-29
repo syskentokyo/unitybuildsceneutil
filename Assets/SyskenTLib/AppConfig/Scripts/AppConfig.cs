@@ -16,7 +16,7 @@ namespace SyskenTLib.CommonAppConfig
     }
     
     
-    [UnityEngine.CreateAssetMenu(fileName = "AppConfig", menuName = "AppConfig", order = 0)]
+
     public class AppConfig : ScriptableObject
     {
 

@@ -13,7 +13,7 @@ namespace SyskenTLib.BuildSceneUtilEditor
     }
     
     
-    [CreateAssetMenu(fileName = "CustomBuildConfig", menuName = "CustomBuildConfig", order = 0)]
+
     public class CustomBuildConfig : ScriptableObject
     {
         [Header("共通")] public bool isClearBuildCache = false;

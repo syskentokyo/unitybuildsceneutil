@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SyskenTLib.BuildSceneUtilEditor
 {
-    [CreateAssetMenu(fileName = "CustomBuildRootConfig", menuName = "CustomBuildRootConfig", order = 0)]
+
     public class SyskenTLibCustomRootConfig : ScriptableObject
     {
         
