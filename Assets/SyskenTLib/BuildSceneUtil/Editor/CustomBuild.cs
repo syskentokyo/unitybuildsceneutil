@@ -743,8 +743,9 @@ namespace SyskenTLib.BuildSceneUtilEditor
             }
             
             //
-            // Android用の設定
+            // iOS,Android用の設定
             //
+            SettingPreBuildOniOS(buildTarget, config);
             AutoChangeConfigPreBuildOnAndroid(buildTarget, config);
             
                         
@@ -1029,6 +1030,38 @@ namespace SyskenTLib.BuildSceneUtilEditor
 
             return BuildTargetGroup.Unknown;
         }
+        #endregion
+
+        #region iOS
+
+        private static void SettingPreBuildOniOS(BuildTarget buildTarget, CustomBuildConfig config)
+        {
+            if (buildTarget != BuildTarget.iOS) return;
+            
+            Debug.Log("iOSビルド前の準備");
+            
+            //
+            //既存のXcode終了する
+            //
+            string basedir = Path.GetDirectoryName(Application.dataPath);
+            ProcessStartInfo startInfo = new ProcessStartInfo("/bin/zsh");
+            startInfo.WorkingDirectory = basedir;
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardInput = true;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardError = true;
+
+            Process proc = new Process();
+            proc.StartInfo = startInfo;
+
+            proc.Start();
+            proc.StandardInput.WriteLine(basedir);
+            proc.StandardInput.WriteLine(" ps -ef | grep Xcode | grep -v grep | awk '{print $2}' | xargs kill");
+            proc.StandardInput.Flush();
+
+
+        }
+
         #endregion
 
 
